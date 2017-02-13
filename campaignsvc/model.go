@@ -13,10 +13,14 @@ type Campaign struct {
 	Title        string        `json:"title"`          // The title of the campaign as seen by end user
 	StartAt      time.Time     `json:"start_at"`       // The start date of the campaign
 	EndAt        time.Time     `json:"end_at"`         // The end date of the campaign
-	Regions      []string      `json:"regions"`        // The participating regions
+	Region       string        `json:"region"`         // The participating regions
 	ViewMaxCount int           `json:"view_max_count"` // The maximum view count before the ads expired
 	ViewCount    int           `json:"view_count"`     // The current view count
 	Owner        string        `json:"owner"`          // The campaign owner
 	OwnerId      string        `json:"owner_id"`
 	Active       bool          `json:"active"` // The state of the campaign
+	Country      string        `json:"country"`
+	City         string        `json:"city"`
 }
+
+// groupby Grouping parameter - link, recipient, domain, country, region, city, month, day, hour, minute, daily_hour.
