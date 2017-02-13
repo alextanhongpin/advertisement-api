@@ -1,8 +1,3 @@
-# Advertisement API
+# Advertisement Microservice
 
-## Config
-
-Configs are stored in json file.
-
-## Database
-
+__Work in Progress__
