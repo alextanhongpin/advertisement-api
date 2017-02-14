@@ -1,4 +1,5 @@
 {
   "port": ":8080",
-  "mongo_uri": "mongodb://localhost"
+  "mongo_uri": "mongodb://localhost",
+  "mongo_db": "adsvc"
 }
