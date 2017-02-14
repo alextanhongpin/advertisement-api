@@ -7,7 +7,8 @@ import (
 )
 
 type Configuration struct {
-	Port string `json:"port"`
+	Port string `json:"port"`,
+	MongoURI string `json:"mongo_uri"`
 }
 
 var config Configuration
