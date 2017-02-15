@@ -11,6 +11,19 @@ import (
 
 type Endpoint struct{}
 
+// func (e Endpoint) Index() httprouter.Handle {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+
+// 		ad := Advertisement{}
+// 		renderTemplate(w, "index", "base", ad)
+// 	}
+// }
+func Index(w http.ResponseWriter, r *http.Request) {
+
+	ad := Advertisement{}
+	renderTemplate(w, "index", "base", ad)
+}
+
 func (e Endpoint) All(svc service) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
@@ -36,6 +49,7 @@ func (e Endpoint) All(svc service) httprouter.Handle {
 	}
 }
 
+// Create with POST
 func (e Endpoint) Create(svc service) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		// Define a new model
@@ -54,6 +68,22 @@ func (e Endpoint) Create(svc service) httprouter.Handle {
 		}
 
 		ResponseWithJSON(w, j, 201)
+	}
+}
+
+func (e Endpoint) Success() httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		fmt.Fprintf(w, "success")
+	}
+}
+
+// Create with Form
+func (e Endpoint) CreateForm(svc service) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		r.ParseForm()
+
+		// fmt.Fprintf(w, "{message: %q}", r.PostFormValue("name"))
+		http.Redirect(w, r, "/success", 301)
 	}
 }
 
@@ -104,13 +134,17 @@ func (e Endpoint) Delete(svc service) httprouter.Handle {
 // }
 
 func ErrorWithJSON(w http.ResponseWriter, message string, code int) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Content-Type", "application/vnd.api+json; charset=utf-8")
 	w.WriteHeader(code)
 	fmt.Fprintf(w, "{message: %q}", message)
 }
 
 func ResponseWithJSON(w http.ResponseWriter, json []byte, code int) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Content-Type", "application/vnd.api+json; charset=utf-8")
 	w.WriteHeader(code)
 	w.Write(json)
+}
+func FetchParams(r *http.Request) httprouter.Params {
+	ctx := r.Context()
+	return ctx.Value("params").(httprouter.Params)
 }

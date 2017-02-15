@@ -1,15 +1,17 @@
 package adsvc
 
 import (
+	// "github.com/asaskevich/govalidator"
+	// "github.com/google/jsonapi"
 	"gopkg.in/mgo.v2/bson"
 	"time"
 )
 
 type Advertisement struct {
-	Id         bson.ObjectId `bson:"_id,omitempty" json:"id"`
-	Name       string        `json:"name"`
-	CreatedAt  time.Time     `json:"created_at"`
-	ModifiedAt time.Time     `json:"modified_at"`
+	Id         bson.ObjectId `valid:"-" bson:"_id,omitempty" json:"id"`
+	Name       string        `valid:"-" json:"name"`
+	CreatedAt  time.Time     `valid:"-" json:"created_at"`
+	ModifiedAt time.Time     `valid:"-" json:"modified_at"`
 	// Title        string        `json:"title"`
 	// StartAt      time.Time     `json:"start_at"`
 	// EndAt        time.Time     `json:"end_at"`

@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"gopkg.in/mgo.v2"
 )
 
@@ -18,6 +19,7 @@ func init() {
 	var err error
 	session, err = mgo.Dial("localhost")
 	if err != nil {
+		fmt.Print("mongodb is not initialized")
 		panic(err)
 	}
 }

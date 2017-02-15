@@ -1,0 +1,13 @@
+{{define "head"}}<title>Hello world</title>{{end}}
+{{define "body"}}
+  <h1>Create Ad</h1>
+  <br>
+  <form method="POST" action="/advertisements">
+    
+    Name: <input type="text" name="name">
+    Description: <input type="text" name="description">
+    <input type="submit" name="submit" value="Create">
+
+    
+  </form>
+{{end}}
