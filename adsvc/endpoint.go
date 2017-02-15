@@ -3,7 +3,6 @@ package adsvc
 import (
 	"encoding/json"
 	"fmt"
-	// "gopkg.in/mgo.v2/bson"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -37,25 +36,28 @@ func (e Endpoint) All(svc service) httprouter.Handle {
 	}
 }
 
-// func (e Endpoint) Create() httprouter.Handle {
-// 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-// 		ad := Advertisement{}
-// 		json.NewDecoder(r.Body).Decode(&ad)
+func (e Endpoint) Create(svc service) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		ad := Advertisement{}
+		json.NewDecoder(r.Body).Decode(&ad)
 
-// 		ad.Id = bson.NewObjectId()
+		ad.Id = bson.NewObjectId()
 
-// 		ds := common.NewDataStore()
-// 		defer ds.Close()
+		v, err := svc.Create(ad)
 
-// 		c := ds.C("advertisements")
+		if err != nil {
+			panic(err)
+		}
 
-// 		c.Insert(ad)
+		j, err := json.Marshal(v)
 
-// 		j, _ := json.Marshal(ad)
+		if err != nil {
+			panic(err)
+		}
 
-// 		ResponseWithJSON(w, j, 201)
-// 	}
-// }
+		ResponseWithJSON(w, j, 201)
+	}
+}
 
 // func (e Endpoint) One() httprouter.Handle {
 // 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
