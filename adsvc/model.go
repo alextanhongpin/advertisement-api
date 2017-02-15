@@ -35,6 +35,13 @@ type advertisementsRequest struct {
 	Query string `json:"query,omitempty"`
 }
 
+type deleteRequest struct {
+}
+type deleteResponse struct {
+	Ok    bool `json:"ok"`
+	Error bool `json:"error,omitempty"`
+}
+
 type advertisementsResponse struct {
 	Data []Advertisement `json:"data"`
 	Err  string          `json:"err,omitempty"`

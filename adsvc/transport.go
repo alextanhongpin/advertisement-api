@@ -9,6 +9,7 @@ func SetupRouter(router *httprouter.Router) *httprouter.Router {
 	svc := service{}
 	router.GET("/advertisements", endpoint.All(svc))
 	// router.GET("/advertisements/:id", endpoint.One(svc))
-	// router.POST("/advertisements", endpoint.Create(svc))
+	router.POST("/advertisements", endpoint.Create(svc))
+	router.DELETE("/advertisements/:id", endpoint.Delete(svc))
 	return router
 }

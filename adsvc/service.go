@@ -1,6 +1,7 @@
 package adsvc
 
 import (
+	"errors"
 	"github.com/alextanhongpin/adsvc/common"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -36,11 +37,11 @@ func (s service) All(request interface{}) ([]Advertisement, error) {
 }
 
 func (s service) One(id string) (Advertisement, error) {
+	ad := Advertisement{}
 	if !bson.IsObjectIdHex(id) {
-		return nil, ErrInvalidId
+		return ad, ErrInvalidId
 	}
 	oid := bson.ObjectIdHex(id)
-	ad := Advertisement{}
 
 	ds := common.NewDataStore()
 	defer ds.Close()
@@ -49,7 +50,7 @@ func (s service) One(id string) (Advertisement, error) {
 	err := c.FindId(oid).One(&ad)
 
 	if err != nil {
-		return nil, ErrorNotFound
+		return ad, ErrorNotFound
 	}
 	return ad, nil
 }
@@ -58,16 +59,36 @@ func (s service) One(id string) (Advertisement, error) {
 // and returns the created resource and an error
 func (s service) Create(ad Advertisement) (Advertisement, error) {
 
-		ds := common.NewDataStore()
-		defer ds.Close()
+	ds := common.NewDataStore()
+	defer ds.Close()
 
-		c := ds.C("advertisements")
+	c := ds.C("advertisements")
 
-		err := c.Insert(ad)
+	err := c.Insert(ad)
 
-		if err != nil {
-			return nil, err
-		}
-		return ad, nil
+	if err != nil {
+		return ad, err
 	}
+	return ad, nil
+}
+
+func (s service) Delete(id string) (bool, error) {
+	// Verify id is ObjectId, otherwise bail
+	if !bson.IsObjectIdHex(id) {
+		return false, ErrInvalidId
+	}
+
+	// Grab id
+	oid := bson.ObjectIdHex(id)
+	ds := common.NewDataStore()
+	defer ds.Close()
+
+	c := ds.C("advertisements")
+
+	err := c.RemoveId(oid)
+
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
