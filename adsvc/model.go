@@ -6,10 +6,10 @@ import (
 )
 
 type Advertisement struct {
-	Id   bson.ObjectId `bson:"_id,omitempty" json:"id"`
-	Name string        `json:"name"`
-	// CreatedAt    time.Time     `json:"created_at"`
-	// ModifiedAt   time.Time     `json:"modified_at"`
+	Id         bson.ObjectId `bson:"_id,omitempty" json:"id"`
+	Name       string        `json:"name"`
+	CreatedAt  time.Time     `json:"created_at"`
+	ModifiedAt time.Time     `json:"modified_at"`
 	// Title        string        `json:"title"`
 	// StartAt      time.Time     `json:"start_at"`
 	// EndAt        time.Time     `json:"end_at"`
@@ -22,4 +22,20 @@ type Advertisement struct {
 	// Images       []string      `json:"images"`
 	// CallToAction string        `json:"call_to_action"`
 	// Links        []string      `json:"links`
+}
+
+type AdvertisementResource struct {
+	Data Advertisement `json:"data"`
+}
+type AdvertisementCollection struct {
+	Data []Advertisement `json:"data"`
+}
+
+type advertisementsRequest struct {
+	Query string `json:"query,omitempty"`
+}
+
+type advertisementsResponse struct {
+	Data []Advertisement `json:"data"`
+	Err  string          `json:"err,omitempty"`
 }
