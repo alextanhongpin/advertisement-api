@@ -9,6 +9,7 @@ type Campaign struct {
 	Id           bson.ObjectId `bson:"_id,omitempty" json:"id"`
 	Name         string        `json:"name"` // The name of the campaign as seen by admin
 	CreatedAt    time.Time     `json:"created_at"`
+	Description  string        `json:"description"`
 	ModifiedAt   time.Time     `json:"modified_at"`
 	Title        string        `json:"title"`          // The title of the campaign as seen by end user
 	StartAt      time.Time     `json:"start_at"`       // The start date of the campaign
@@ -24,3 +25,11 @@ type Campaign struct {
 }
 
 // groupby Grouping parameter - link, recipient, domain, country, region, city, month, day, hour, minute, daily_hour.
+
+type CampaignCollection struct {
+	Data []Campaign `json:"data"`
+}
+
+type CampaignResource struct {
+	Data Campaign `json:"data"`
+}
