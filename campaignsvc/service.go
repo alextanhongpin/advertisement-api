@@ -71,3 +71,24 @@ func (s service) Create(cm Campaign) (string, error) {
 	}
 	return cm.Id.Hex(), nil
 }
+
+func (s service) Delete(request interface{}) (bool, error) {
+	// Verify id is ObjectId, otherwise bail
+	req := request.(deleteRequest)
+	if !bson.IsObjectIdHex(req.Id) {
+		return false, ErrInvalidId
+	}
+	// Grab id
+	oid := bson.ObjectIdHex(req.Id)
+	ds := common.NewDataStore()
+	defer ds.Close()
+
+	c := ds.C("campaigns")
+
+	err := c.RemoveId(oid)
+
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

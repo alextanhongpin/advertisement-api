@@ -13,6 +13,7 @@ func SetupRouter(router *httprouter.Router) *httprouter.Router {
 	service := service{}
 	router.GET(wrap("/api/v1/campaigns", endpoint.All(service)))
 	router.GET(wrap("/api/v1/campaigns/:id", endpoint.One(service)))
+	router.DELETE(wrap("/api/v1/campaigns/:id", endpoint.Delete(service)))
 
 	router.GET(wrap("/create/campaigns", endpoint.CreateGet(service)))
 	router.POST(wrap("/create/campaigns", endpoint.CreatePost(service)))

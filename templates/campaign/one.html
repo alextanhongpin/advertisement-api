@@ -15,6 +15,28 @@
   {{.CreatedAt}}
 </p>
 
+<button class="js-delete-campaign" data-href="/api/v1/campaigns/{{.Id}}">Delete Campaign</button>
+
 <button>Create Ads</button>
 
+
+<script type="text/javascript">
+  
+  const button = document.querySelector('.js-delete-campaign')
+  button.addEventListener('click', (evt) => {
+    const link = evt.currentTarget.dataset.href
+    const request = fetch(link, {
+      method: 'DELETE'
+    })
+
+    const response = request.then((body) => {
+      return body.json()
+    })
+
+    response.then((data) => {
+      console.log(data)
+      // Redirect the user to another page
+    })
+  }, false)
+</script>
 {{end}}

@@ -5,32 +5,45 @@ import (
 	"time"
 )
 
-type Campaign struct {
-	// *JsonApi
-	Id           bson.ObjectId `bson:"_id,omitempty" json:"id"`
-	Name         string        `json:"name"` // The name of the campaign as seen by admin
-	CreatedAt    time.Time     `json:"created_at"`
-	Description  string        `json:"description"`
-	UpdatedAt    time.Time     `json:"updated_at"`
-	Title        string        `json:"title"`          // The title of the campaign as seen by end user
-	StartAt      time.Time     `json:"start_at"`       // The start date of the campaign
-	EndAt        time.Time     `json:"end_at"`         // The end date of the campaign
-	Region       string        `json:"region"`         // The participating regions
-	ViewMaxCount int           `json:"view_max_count"` // The maximum view count before the ads expired
-	ViewCount    int           `json:"view_count"`     // The current view count
-	Owner        string        `json:"owner"`          // The campaign owner
-	OwnerId      string        `json:"owner_id"`
-	Active       bool          `json:"active"` // The state of the campaign
-	Country      string        `json:"country"`
-	City         string        `json:"city"`
-}
+type (
+	Campaign struct {
+		Id           bson.ObjectId `bson:"_id,omitempty" json:"id"`
+		Name         string        `json:"name"` // The name of the campaign as seen by admin
+		CreatedAt    time.Time     `json:"created_at"`
+		UpdatedAt    time.Time     `json:"updated_at"`
+		StartAt      time.Time     `json:"start_at"` // The start date of the campaign
+		EndAt        time.Time     `json:"end_at"`   // The end date of the campaign
+		Description  string        `json:"description"`
+		Title        string        `json:"title"`          // The title of the campaign as seen by end user
+		Region       string        `json:"region"`         // The participating regions
+		ViewMaxCount int           `json:"view_max_count"` // The maximum view count before the ads expired
+		ViewCount    int           `json:"view_count"`     // The current view count
+		Owner        string        `json:"owner"`          // The campaign owner
+		OwnerId      string        `json:"owner_id"`
+		Active       bool          `json:"active"` // The state of the campaign
+		Country      string        `json:"country"`
+		City         string        `json:"city"`
+	}
+	CampaignCollection struct {
+		Data []Campaign `json:"data"`
+	}
+	CampaignResource struct {
+		Data Campaign `json:"data"`
+	}
+
+	deleteRequest struct {
+		Id string `json:"id"`
+	}
+	deleteResponse struct {
+		Ok bool `json:"ok"`
+	}
+
+	oneTemplate struct {
+		Id          string    `json:"id"`
+		Name        string    `json:"name"`
+		Description string    `json:"description"`
+		CreatedAt   time.Time `json:"created_at"`
+	}
+)
 
 // groupby Grouping parameter - link, recipient, domain, country, region, city, month, day, hour, minute, daily_hour.
-
-type CampaignCollection struct {
-	Data []Campaign `json:"data"`
-}
-
-type CampaignResource struct {
-	Data Campaign `json:"data"`
-}

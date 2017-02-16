@@ -9,7 +9,7 @@ __Work in Progress__
 
 Part of the 'Campaign' Epic
 
-@C01#DONE
+@C01#Done
 ## Feature: Create Campaign
 
 As a user,
@@ -74,6 +74,15 @@ As a user,
 I want to view analytics for the ads I created,
 In order to measure the success metrics.
 
+--- 
+Part of the 'Miscellaneous' Epic
+
+@MSC01#Done
+## Feature: Serve static files
+
+As a dev,
+I want to serve static files,
+So that I can use it on the client-side.
 
 
 
