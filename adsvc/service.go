@@ -6,20 +6,16 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type Service interface {
-	All() []Advertisement
-}
-
 // ErrEmpty is returned when an input string is empty.
 var (
 	ErrInvalidId  = errors.New("Invalid Id")
 	ErrorNotFound = errors.New("Not found")
 )
 
-type service struct{}
+type Service struct{}
 
 // All returns a list of advertisements
-func (s service) All(request interface{}) ([]Advertisement, error) {
+func (s Service) All(request interface{}) ([]Advertisement, error) {
 
 	var advertisements []Advertisement
 
@@ -36,7 +32,7 @@ func (s service) All(request interface{}) ([]Advertisement, error) {
 	return advertisements, nil
 }
 
-func (s service) One(id string) (Advertisement, error) {
+func (s Service) One(id string) (Advertisement, error) {
 	ad := Advertisement{}
 	if !bson.IsObjectIdHex(id) {
 		return ad, ErrInvalidId
@@ -57,7 +53,7 @@ func (s service) One(id string) (Advertisement, error) {
 
 // Create accepts a new advertisement model
 // and returns the created resource and an error
-func (s service) Create(ad Advertisement) (Advertisement, error) {
+func (s Service) Create(ad Advertisement) (Advertisement, error) {
 
 	ds := common.NewDataStore()
 	defer ds.Close()
@@ -72,7 +68,7 @@ func (s service) Create(ad Advertisement) (Advertisement, error) {
 	return ad, nil
 }
 
-func (s service) Delete(id string) (bool, error) {
+func (s Service) Delete(id string) (bool, error) {
 	// Verify id is ObjectId, otherwise bail
 	if !bson.IsObjectIdHex(id) {
 		return false, ErrInvalidId

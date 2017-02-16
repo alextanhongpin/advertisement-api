@@ -7,7 +7,13 @@ import (
 	"time"
 )
 
+type JsonApi struct {
+	Type string `json:"type"`
+}
+
 type Advertisement struct {
+	*JsonApi
+	CampaignId bson.ObjectId `valid:"-" bson:"_id,omitempty" json:"campaign_id"`
 	Id         bson.ObjectId `valid:"-" bson:"_id,omitempty" json:"id"`
 	Name       string        `valid:"-" json:"name"`
 	CreatedAt  time.Time     `valid:"-" json:"created_at"`

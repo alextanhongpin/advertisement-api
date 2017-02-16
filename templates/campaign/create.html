@@ -1,0 +1,38 @@
+{{define "head"}}
+  <title>Create Campaign</title>
+{{end}}
+{{define "body"}}
+  <h1>Create Campaign</h1>
+
+  <form method="POST" action="/campaigns/create">
+    <p>
+      <label>Campaign Name</label>
+    </p>
+    <p>
+      <input type="text" name="campaign_name">
+    </p>
+
+    <p>
+      <label>Campaign Description</label>
+    </p>
+    <p>
+      <input type="text" name="campaign_description">
+    </p>
+
+    <p>
+      <label>Start Date</label>
+    </p>
+    <p>
+      <input type="date" name="start_at">
+    </p>
+
+    <p>
+      <label>End Date</label>
+    </p>
+    <p>
+      <input type="date" name="end_at">
+    </p>
+
+    <input type="submit" value="Create Campaign">
+  </form>
+{{end}}
