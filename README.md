@@ -16,6 +16,25 @@ As a user,
 I want to create a campaign,
 To measure the success of my offerings.
 
+@C02#Done
+## Feature: View Campaign
+
+As a user,
+I want to view a campaign,
+In order to get more info on the campaign
+
+## Feature: Delete Campaign
+
+As a user,
+I want to delete a campaign,
+In order to permanently remove it from my campaign list.
+
+## Feature: Update Campaign
+
+As a user,
+I want to update my campaign,
+So that others can view the campaign.
+
 ---
 
 Part of the 'Advertisement' Epic.

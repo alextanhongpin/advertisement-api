@@ -1,10 +1,20 @@
-{{define "head"}}<title>View one</title>{{end}}
+{{define "head"}}
+  <title>View one</title>
+{{end}}
 {{define "body"}}
 
-<h1>View Advertisement</h1>
+<h1>View Campaign</h1>
 
+<p>
   {{.Name}}
+</p>
+<p>
   {{.Description}}
+</p>
+<p>
   {{.CreatedAt}}
+</p>
+
+<button>Create Ads</button>
 
 {{end}}
