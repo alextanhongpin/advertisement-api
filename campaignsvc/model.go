@@ -6,11 +6,12 @@ import (
 )
 
 type Campaign struct {
+	// *JsonApi
 	Id           bson.ObjectId `bson:"_id,omitempty" json:"id"`
 	Name         string        `json:"name"` // The name of the campaign as seen by admin
 	CreatedAt    time.Time     `json:"created_at"`
 	Description  string        `json:"description"`
-	ModifiedAt   time.Time     `json:"modified_at"`
+	UpdatedAt    time.Time     `json:"updated_at"`
 	Title        string        `json:"title"`          // The title of the campaign as seen by end user
 	StartAt      time.Time     `json:"start_at"`       // The start date of the campaign
 	EndAt        time.Time     `json:"end_at"`         // The end date of the campaign

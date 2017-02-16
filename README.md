@@ -5,18 +5,18 @@ __Work in Progress__
 
 # User Story
 
+---
+
 Part of the 'Campaign' Epic
 
-@C01
+@C01#DONE
 ## Feature: Create Campaign
 
 As a user,
 I want to create a campaign,
 To measure the success of my offerings.
 
-
-
-
+---
 
 Part of the 'Advertisement' Epic.
 

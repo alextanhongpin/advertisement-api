@@ -13,6 +13,7 @@ func init() {
 	}
 	templates["index"] = template.Must(template.ParseFiles("templates/index.html", "templates/base.html"))
 	templates["create-campaign"] = template.Must(template.ParseFiles("templates/campaign/create.html", "templates/base.html"))
+	templates["view-campaign"] = template.Must(template.ParseFiles("templates/campaign/one.html", "templates/base.html"))
 }
 
 func RenderTemplate(w http.ResponseWriter, name string, template string, viewModel interface{}) {

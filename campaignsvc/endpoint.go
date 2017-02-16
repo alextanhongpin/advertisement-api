@@ -33,6 +33,22 @@ func (e Endpoint) All(svc service) http.HandlerFunc {
 	}
 }
 
+func (e Endpoint) GetOne(svc service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		ctx := r.Context()
+		ps := ctx.Value("params").(httprouter.Params)
+
+		v, err := svc.One(ps.ByName("id"))
+
+		if err != nil {
+			panic(err)
+		}
+
+		common.RenderTemplate(w, "view-campaign", "base", v)
+	}
+}
+
 func (e Endpoint) One(svc service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
