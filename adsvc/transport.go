@@ -19,18 +19,6 @@ func SetupRouter(router *httprouter.Router) *httprouter.Router {
 	router.DELETE("/advertisements/:id", endpoint.Delete(svc))
 	return router
 }
-func loggerMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Print("At logger middleware")
-		next.ServeHTTP(w, r)
-	})
-}
-func timeoutMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Print("At timeout middleware")
-		next.ServeHTTP(w, r)
-	})
-}
 
 func wrap(p string, h func(http.ResponseWriter, *http.Request)) (string, httprouter.Handle) {
 	return p, wrapHandler(alice.New(loggerMiddleware, timeoutMiddleware).ThenFunc(h))
