@@ -15,11 +15,15 @@ type Endpoint struct{}
 
 func (e Endpoint) All(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// fmt.Fprintf(w, "Index route for campaign service %s", svc.All())
-		v, err := svc.All()
+		req := allRequest{
+			Query: nil,
+		}
+
+		v, err := svc.All(req)
 		if err != nil {
 			panic(err)
 		}
+
 		res := CampaignCollection{
 			Data: v,
 		}
@@ -35,51 +39,53 @@ func (e Endpoint) All(svc Service) http.HandlerFunc {
 
 func (e Endpoint) GetOne(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		ctx := r.Context()
 		ps := ctx.Value("params").(httprouter.Params)
 
-		v, err := svc.One(ps.ByName("id"))
+		req := oneRequest{
+			Id: ps.ByName("id"),
+		}
 
+		v, err := svc.One(req)
 		if err != nil {
 			panic(err)
 		}
 
 		// Convert the objectId to string
-		ot := oneTemplate{
+		res := oneTemplate{
 			Id:          v.Id.Hex(),
 			Name:        v.Name,
 			CreatedAt:   v.CreatedAt,
 			Description: v.Description,
 		}
 
-		common.RenderTemplate(w, "view-campaign", "base", ot)
+		common.RenderTemplate(w, "view-campaign", "base", res)
 	}
 }
 
 func (e Endpoint) One(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		ctx := r.Context()
 		p := ctx.Value("params").(httprouter.Params)
 
-		fmt.Println(p)
-		// ctx2.Value("hello")
+		req := oneRequest{
+			Id: ps.ByName("id"),
+		}
 
-		v, err := svc.One(p.ByName("id"))
-
+		v, err := svc.One(req)
 		if err != nil {
 			panic(err)
 		}
-		res := CampaignResource{
+
+		res := oneResponse{
 			Data: v,
 		}
 
 		j, err := json.Marshal(res)
-
 		if err != nil {
 			panic(err)
 		}
+
 		helper.ResponseWithJSON(w, j, 200)
 	}
 }

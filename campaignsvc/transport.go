@@ -10,6 +10,7 @@ import (
 
 func SetupRouter(router *httprouter.Router) *httprouter.Router {
 	endpoint := Endpoint{}
+	// Is it a good practice to initialize service this way?
 	service := Service{}
 	router.GET(wrap("/api/v1/campaigns", endpoint.All(service)))
 	router.GET(wrap("/api/v1/campaigns/:id", endpoint.One(service)))

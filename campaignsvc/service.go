@@ -9,40 +9,43 @@ import (
 )
 
 var (
-	ErrInvalidId  = errors.New("Invalid Id")
-	ErrorNotFound = errors.New("Not found")
+	ErrorInvalidId = errors.New("Invalid ID")
+	ErrorNotFound  = errors.New("Not found")
 )
 
 type Service struct{}
 
-func (s Service) All() ([]Campaign, error) {
+func (s Service) All(request interface{}) ([]Campaign, error) {
+	// Handle request
+	req := request.(allRequest)
+
 	var campaigns []Campaign
+
 	ds := common.NewDataStore()
 	defer ds.Close()
-
 	c := ds.C("campaigns")
-	iter := c.Find(nil).Iter()
-	result := Campaign{}
-	for iter.Next(&result) {
-		campaigns = append(campaigns, result)
-	}
 
+	iter := c.Find(req.Query).Iter()
+	res := Campaign{}
+
+	for iter.Next(&result) {
+		campaigns = append(campaigns, res)
+	}
 	return campaigns, nil
 }
 
-func (s Service) One(id string) (Campaign, error) {
+func (s Service) One(request interface{}) (Campaign, error) {
+	req := request.(oneRequest)
+
 	var campaign Campaign
+	if !bson.IsObjectIdHex(req.Id) {
+		return campaign, ErrorInvalidId
+	}
+	oid := bson.ObjectIdHex(req.Id)
 
 	ds := common.NewDataStore()
 	defer ds.Close()
-
-	if !bson.IsObjectIdHex(id) {
-		return campaign, ErrInvalidId
-	}
-
 	c := ds.C("campaigns")
-
-	oid := bson.ObjectIdHex(id)
 
 	err := c.FindId(oid).One(&campaign)
 
@@ -52,8 +55,8 @@ func (s Service) One(id string) (Campaign, error) {
 	return campaign, nil
 }
 
-func (s Service) Create(cm Campaign) (string, error) {
-
+func (s Service) Create(request interface{}) (string, error) {
+	req := request.(createRequest)
 	cm.Id = bson.NewObjectId()
 	ds := common.NewDataStore()
 	defer ds.Close()
@@ -69,18 +72,20 @@ func (s Service) Create(cm Campaign) (string, error) {
 }
 
 func (s Service) Delete(request interface{}) (bool, error) {
-	// Verify id is ObjectId, otherwise bail
 	req := request.(deleteRequest)
+	// Verify id is ObjectId, otherwise bail
 	if !bson.IsObjectIdHex(req.Id) {
-		return false, ErrInvalidId
+		return false, ErrorInvalidId
 	}
 	// Grab id
 	oid := bson.ObjectIdHex(req.Id)
+
+	// Initialize collection
 	ds := common.NewDataStore()
 	defer ds.Close()
-
 	c := ds.C("campaigns")
 
+	// Action
 	err := c.RemoveId(oid)
 
 	if err != nil {

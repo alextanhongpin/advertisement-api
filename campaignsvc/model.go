@@ -24,12 +24,37 @@ type (
 		Country      string        `json:"country"`
 		City         string        `json:"city"`
 	}
-	CampaignCollection struct {
+	// CampaignCollection struct {
+	// 	Data []Campaign `json:"data"`
+	// }
+	// CampaignResource struct {
+	// 	Data Campaign `json:"data"`
+	// }
+
+	allRequest struct {
+		Query string `json:"query"`
+	}
+	allResponse struct {
 		Data []Campaign `json:"data"`
 	}
-	CampaignResource struct {
+
+	oneRequest struct {
+		Id string `json:"id"`
+	}
+	oneResponse struct {
 		Data Campaign `json:"data"`
 	}
+
+	createRequest struct {
+		Data Campaign `json:"data"`
+	}
+
+	createResponse struct {
+		Id string `json:"id"`
+	}
+
+	updateRequest  struct{}
+	updateResponse struct{}
 
 	deleteRequest struct {
 		Id string `json:"id"`

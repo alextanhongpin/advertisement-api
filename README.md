@@ -2,7 +2,17 @@
 
 __Work in Progress__
 
+## Testing
 
+To bootstrap testing:
+```go
+ginkgo bootstrap
+```
+
+To generate test specs:
+```go
+ginkgo generate users
+```
 # User Story
 
 ---
