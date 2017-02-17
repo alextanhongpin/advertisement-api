@@ -7,7 +7,6 @@ import (
 
 	"github.com/alextanhongpin/adsvc/common"
 	"github.com/alextanhongpin/adsvc/helper"
-	"github.com/julienschmidt/httprouter"
 )
 
 type Endpoint struct{}
@@ -40,8 +39,7 @@ func (e Endpoint) All(svc Service) http.HandlerFunc {
 
 func (e Endpoint) GetOne(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		ps := ctx.Value("params").(httprouter.Params)
+		ps := helper.FetchParams(r)
 
 		req := oneRequest{
 			Id: ps.ByName("id"),
@@ -68,8 +66,7 @@ func (e Endpoint) GetOne(svc Service) http.HandlerFunc {
 
 func (e Endpoint) One(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		ps := ctx.Value("params").(httprouter.Params)
+		ps := helper.FetchParams(r)
 
 		req := oneRequest{
 			Id: ps.ByName("id"),
@@ -126,8 +123,7 @@ func (e Endpoint) CreatePost(svc Service) http.HandlerFunc {
 
 func (e Endpoint) Delete(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		ps := ctx.Value("params").(httprouter.Params)
+		ps := helper.FetchParams(r)
 		req := deleteRequest{
 			Id: ps.ByName("id"),
 		}

@@ -16,75 +16,81 @@ type Service struct{}
 
 // All returns a list of advertisements
 func (s Service) All(request interface{}) ([]Advertisement, error) {
-
-	var advertisements []Advertisement
+	var iter *mgo.Iter
+	req := request.(allRequest)
+	res := []Advertisement{}
 
 	ds := common.NewDataStore()
 	defer ds.Close()
-
 	c := ds.C("advertisements")
-	iter := c.Find(nil).Iter()
+
+	if req.Query == "" {
+		iter = c.Find(nil).Iter()
+	} else {
+		iter = c.Find(req.Query).Iter()
+	}
 	result := Advertisement{}
 	for iter.Next(&result) {
-		advertisements = append(advertisements, result)
+		res = append(res, result)
 	}
 
-	return advertisements, nil
+	return res, nil
 }
 
-func (s Service) One(id string) (Advertisement, error) {
-	ad := Advertisement{}
-	if !bson.IsObjectIdHex(id) {
-		return ad, ErrInvalidId
+func (s Service) One(request interface{}) (Advertisement, error) {
+	req := request.(oneRequest)
+	res := Advertisement{}
+
+	oid, err := helper.ValidateId(req.Id)
+	if err != nil {
+		return res, err
 	}
-	oid := bson.ObjectIdHex(id)
 
 	ds := common.NewDataStore()
 	defer ds.Close()
-
 	c := ds.C("advertisements")
-	err := c.FindId(oid).One(&ad)
 
-	if err != nil {
-		return ad, ErrorNotFound
+	if err := c.FindId(oid).One(&res); err != nil {
+		return res, ErrorNotFound
 	}
-	return ad, nil
+
+	return res, nil
 }
 
 // Create accepts a new advertisement model
 // and returns the created resource and an error
-func (s Service) Create(ad Advertisement) (Advertisement, error) {
+func (s Service) Create(request interface{}) (bool, error) {
+	req := request.(createRequest)
+	res := false
 
 	ds := common.NewDataStore()
 	defer ds.Close()
-
 	c := ds.C("advertisements")
 
-	err := c.Insert(ad)
-
-	if err != nil {
-		return ad, err
+	if err := c.Insert(req.Data); err != nil {
+		return res, err
 	}
-	return ad, nil
+	res = true
+	return res, nil
 }
 
-func (s Service) Delete(id string) (bool, error) {
-	// Verify id is ObjectId, otherwise bail
-	if !bson.IsObjectIdHex(id) {
-		return false, ErrInvalidId
+func (s Service) Delete(request interface{}) (bool, error) {
+	req := request.(deleteRequest)
+	res := false
+
+	oid, err := helper.ValidateId(req.Id)
+	if err != nil {
+		return res, err
 	}
 
-	// Grab id
-	oid := bson.ObjectIdHex(id)
 	ds := common.NewDataStore()
 	defer ds.Close()
-
 	c := ds.C("advertisements")
 
-	err := c.RemoveId(oid)
-
-	if err != nil {
-		return false, err
+	if err := c.RemoveId(oid); err != nil {
+		return res, err
 	}
-	return true, nil
+
+	res = true
+	return res, nil
 }
