@@ -2,7 +2,6 @@ package campaignsvc
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -16,21 +15,23 @@ type Endpoint struct{}
 func (e Endpoint) All(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := allRequest{
-			Query: nil,
+			Query: "",
 		}
 
 		v, err := svc.All(req)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
-		res := CampaignCollection{
+		res := allResponse{
 			Data: v,
 		}
 
 		j, err := json.Marshal(res)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		helper.ResponseWithJSON(w, j, 200)
@@ -48,7 +49,9 @@ func (e Endpoint) GetOne(svc Service) http.HandlerFunc {
 
 		v, err := svc.One(req)
 		if err != nil {
-			panic(err)
+			// This is a template, probably redirect to 404 page?
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		// Convert the objectId to string
@@ -66,7 +69,7 @@ func (e Endpoint) GetOne(svc Service) http.HandlerFunc {
 func (e Endpoint) One(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		p := ctx.Value("params").(httprouter.Params)
+		ps := ctx.Value("params").(httprouter.Params)
 
 		req := oneRequest{
 			Id: ps.ByName("id"),
@@ -74,7 +77,8 @@ func (e Endpoint) One(svc Service) http.HandlerFunc {
 
 		v, err := svc.One(req)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		res := oneResponse{
@@ -83,7 +87,8 @@ func (e Endpoint) One(svc Service) http.HandlerFunc {
 
 		j, err := json.Marshal(res)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		helper.ResponseWithJSON(w, j, 200)
@@ -100,16 +105,19 @@ func (e Endpoint) CreateGet(svc Service) http.HandlerFunc {
 func (e Endpoint) CreatePost(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
-		// Define request
-		req := Campaign{
-			Name:        r.PostFormValue("campaign_name"),
-			Description: r.PostFormValue("campaign_description"),
-			StartAt:     time.Now(), //r.PostFormValue("start_at"),
-			EndAt:       time.Now(), //r.PostFormValue("end_at"),
+
+		req := createRequest{
+			Data: Campaign{
+				Name:        r.PostFormValue("campaign_name"),
+				Description: r.PostFormValue("campaign_description"),
+				StartAt:     time.Now(), //r.PostFormValue("start_at"),
+				EndAt:       time.Now(), //r.PostFormValue("end_at"),
+			},
 		}
 		id, err := svc.Create(req)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		http.Redirect(w, r, "/campaigns/"+id, 301)
@@ -120,23 +128,24 @@ func (e Endpoint) Delete(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		ps := ctx.Value("params").(httprouter.Params)
-		fmt.Println(ps)
 		req := deleteRequest{
 			Id: ps.ByName("id"),
 		}
-		v, err := svc.Delete(req)
 
+		v, err := svc.Delete(req)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		res := deleteResponse{
 			Ok: v,
 		}
-		j, err := json.Marshal(res)
 
+		j, err := json.Marshal(res)
 		if err != nil {
-			panic(err)
+			helper.ErrorWithJSON(w, err.Error(), 400)
+			return
 		}
 
 		// TODO: Update the status code

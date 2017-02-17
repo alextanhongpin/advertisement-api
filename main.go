@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/alextanhongpin/adsvc/adsvc"
+	//"github.com/alextanhongpin/adsvc/adsvc"
 	"github.com/alextanhongpin/adsvc/campaignsvc"
 	"github.com/alextanhongpin/adsvc/common"
 	"github.com/julienschmidt/httprouter"
@@ -16,7 +16,7 @@ func main() {
 
 	// Setup campaign service router
 	router = campaignsvc.SetupRouter(router)
-	router = adsvc.SetupRouter(router)
+	// router = adsvc.SetupRouter(router)
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 
 	// Serve static files

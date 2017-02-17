@@ -24,16 +24,11 @@ type (
 		Country      string        `json:"country"`
 		City         string        `json:"city"`
 	}
-	// CampaignCollection struct {
-	// 	Data []Campaign `json:"data"`
-	// }
-	// CampaignResource struct {
-	// 	Data Campaign `json:"data"`
-	// }
 
 	allRequest struct {
 		Query string `json:"query"`
 	}
+
 	allResponse struct {
 		Data []Campaign `json:"data"`
 	}
@@ -41,6 +36,7 @@ type (
 	oneRequest struct {
 		Id string `json:"id"`
 	}
+
 	oneResponse struct {
 		Data Campaign `json:"data"`
 	}
@@ -53,16 +49,24 @@ type (
 		Id string `json:"id"`
 	}
 
-	updateRequest  struct{}
-	updateResponse struct{}
+	updateRequest struct {
+		Data Campaign `json:"data"`
+	}
+
+	updateResponse struct {
+		Ok bool `json:"ok"`
+	}
 
 	deleteRequest struct {
 		Id string `json:"id"`
 	}
+
 	deleteResponse struct {
 		Ok bool `json:"ok"`
 	}
 
+	// View one item template
+	// Created because template cannot handle object id
 	oneTemplate struct {
 		Id          string    `json:"id"`
 		Name        string    `json:"name"`
