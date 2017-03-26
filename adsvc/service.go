@@ -17,6 +17,7 @@ type Service struct{}
 // All returns a list of advertisements
 func (s Service) All(request interface{}) ([]Advertisement, error) {
 	var iter *mgo.Iter
+	// This is called a type assertion
 	req := request.(allRequest)
 	res := []Advertisement{}
 
